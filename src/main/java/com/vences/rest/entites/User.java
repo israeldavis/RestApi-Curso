@@ -1,9 +1,12 @@
 package com.vences.rest.entites;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -35,6 +38,9 @@ public class User {
 	
 	@Column(name="SSN", length=50, nullable=false)
 	private String ssn;
+	
+	@OneToMany(mappedBy="user")
+	private List<Order> orders;
 
 	public User() {
 
@@ -105,6 +111,14 @@ public class User {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 
 	@Override
