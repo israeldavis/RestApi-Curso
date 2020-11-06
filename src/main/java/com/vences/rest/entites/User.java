@@ -11,12 +11,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
 @Entity
 @Table(name="user")
-@JsonIgnoreProperties({"firstname", "lastname"})
+//@JsonIgnoreProperties({"firstname", "lastname"}) -- Static Fitering @JsonIgnore
+@JsonFilter(value="userFilter")
 public class User {
 	
 	@Id
@@ -41,7 +41,7 @@ public class User {
 	private String role;
 	
 	@Column(name="SSN", length=50, nullable=true)
-	@JsonIgnore
+	//@JsonIgnore -- Static Fitering @JsonIgnore
 	private String ssn;
 	
 	@OneToMany(mappedBy="user")
