@@ -1,7 +1,6 @@
 package com.vences.rest.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -9,6 +8,7 @@ import javax.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +28,11 @@ import com.vences.rest.exceptions.UserNameNotFoundException;
 import com.vences.rest.exceptions.UserNotFoundException;
 import com.vences.rest.services.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@Api(tags="User Management RESTful services", value="User Controller", description = "Controller For User Management Service")
 @RestController
 @Validated // Solo para getUserById
 @RequestMapping(value="/users")
@@ -36,13 +41,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping
+	@ApiOperation(value="Obtiene la lista de usuarios")
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
 	
+	@ApiOperation(value="Crea un nuevo usuario")
 	@PostMapping
-	public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder) throws ResponseStatusException {
+	public ResponseEntity<Void> createUser(@ApiParam("Información para que un nuevo usuario sea creado")
+			@Valid @RequestBody User user, UriComponentsBuilder builder) throws ResponseStatusException {
 		try {
 			userService.createUser(user);
 			HttpHeaders headers = new HttpHeaders();
@@ -54,9 +62,10 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id) {
+	public User getUserById(@ApiParam("ID que se utiliza para obtener al usuario desde la BD")
+			@PathVariable("id") @Min(1) Long id) {
 		try {
-			return userService.getUserById(id);
+			return userService.getUserById(id).get();
 		} catch (UserNotFoundException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
 		}

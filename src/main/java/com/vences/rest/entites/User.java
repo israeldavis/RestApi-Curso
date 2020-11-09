@@ -11,19 +11,26 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Este Modelo crea un usuario")
 @Entity
 @Table(name="user")
 public class User {
 	
+	@ApiModelProperty(notes=" Auto generated unique id", required=true, position = 1)
 	@Id
 	@GeneratedValue
 	private Long id;
 	
+	@ApiModelProperty(notes=" Username should be in format flname", example="kreddy",required=false, position = 2)
+	@Size(min=2, max=50)
 	@NotEmpty(message = "El username es un campo OBLIGATORIO. Ingrese un username.")
 	@Column(name="USER_NAME", length=50, nullable=false, unique=true)
 	private String username;
 	
-	@Size(min=2, message="First Name debe tener al menos 2 caracteres")
+	@Size(min=2, max=50, message="First Name debe tener al menos 2 caracteres")
 	@Column(name="FIRST_NAME", length=50, nullable=false)
 	private String firstname;
 	
