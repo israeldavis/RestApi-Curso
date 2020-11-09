@@ -39,6 +39,9 @@ public class User {
 	@Column(name="SSN", length=50, nullable=false)
 	private String ssn;
 	
+	@Column(name="ADDRESS")
+	private String address;
+	
 	@OneToMany(mappedBy="user")
 	private List<Order> orders;
 
@@ -46,7 +49,12 @@ public class User {
 
 	}
 
-	public User(Long id, String username, String firstname, String lastname, String email, String role, String ssn) {
+	
+
+	public User(Long id,
+			@NotEmpty(message = "El username es un campo OBLIGATORIO. Ingrese un username.") String username,
+			@Size(min = 2, message = "First Name debe tener al menos 2 caracteres") String firstname, String lastname,
+			String email, String role, String ssn, String address, List<Order> orders) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -55,7 +63,11 @@ public class User {
 		this.email = email;
 		this.role = role;
 		this.ssn = ssn;
+		this.address = address;
+		this.orders = orders;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -121,12 +133,13 @@ public class User {
 		this.orders = orders;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
-				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
+				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", address=" + address + ", orders=" + orders
+				+ "]";
 	}
-	
-	
 	
 }
